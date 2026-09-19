@@ -27,7 +27,7 @@ export function displayLanguage(path: string): string {
     md: "Markdown",
     txt: "Text",
   };
-  return map[ext] ?? ext.toUpperCase() || "Text";
+  return map[ext] ?? (ext.toUpperCase() || "Text");
 }
 
 /** Strips TypeScript type annotations in a rough, best-effort way so simple TS runs as JS. */
