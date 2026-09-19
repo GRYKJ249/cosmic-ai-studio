@@ -169,6 +169,13 @@ function Dashboard() {
               {t("Generate original images and revisit your private archive.", "أنشئ صوراً أصلية واستعرض أرشيفك الخاص.")}
             </p>
           </Link>
+          <Link to="/code" className="glass rounded-2xl p-6 transition hover:border-primary/50">
+            <Code2 className="h-5 w-5 text-primary" />
+            <p className="mt-3 font-semibold">{t("Code Workspace", "مساحة الأكواد")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("Cloud IDE with a live terminal and AI refactoring.", "بيئة برمجة سحابية بطرفية حيّة ومساعد ذكي للتحسين.")}
+            </p>
+          </Link>
         </div>
       </div>
     </div>
