@@ -214,6 +214,7 @@ function CodeWorkspace() {
   useEffect(() => {
     if (files.length && !activePath) {
       const first = files.find((f) => f.path === "src/main.js") ?? files[0];
+      if (!first) return;
       setOpenTabs([first.path]);
       setActivePath(first.path);
     }
@@ -283,13 +284,13 @@ function CodeWorkspace() {
     const name = window.prompt(t("File name (e.g. utils.js)", "اسم الملف (مثال utils.js)"));
     if (!name?.trim()) return;
     const path = folder ? `${folder}/${name.trim()}` : name.trim();
-    if (fileMap[path]) return toast.error(t("File already exists", "الملف موجود مسبقاً"));
+    if (fileMap[path]) { toast.error(t("File already exists", "الملف موجود مسبقاً")); return; }
     const { data, error } = await supabase
       .from("workspace_files")
       .insert({ user_id: user.id, path, content: "" })
       .select("id, path, content, updated_at")
       .single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     queryClient.setQueryData<WorkspaceFile[]>(["workspace-files", user.id], (old) => [...(old ?? []), data as WorkspaceFile]);
     openFile(path);
   };
@@ -306,7 +307,7 @@ function CodeWorkspace() {
     const next = window.prompt(t("New path", "المسار الجديد"), file.path);
     if (!next?.trim() || next === file.path) return;
     const { error } = await supabase.from("workspace_files").update({ path: next.trim() }).eq("id", file.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     queryClient.setQueryData<WorkspaceFile[]>(["workspace-files", user.id], (old) =>
       (old ?? []).map((f) => (f.id === file.id ? { ...f, path: next.trim() } : f)),
     );
@@ -322,7 +323,7 @@ function CodeWorkspace() {
     if (!user) return;
     if (!window.confirm(t(`Delete ${file.path}?`, `حذف ${file.path}؟`))) return;
     const { error } = await supabase.from("workspace_files").delete().eq("id", file.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     queryClient.setQueryData<WorkspaceFile[]>(["workspace-files", user.id], (old) => (old ?? []).filter((f) => f.id !== file.id));
     closeTab(file.path);
   };
@@ -338,7 +339,7 @@ function CodeWorkspace() {
       .from("workspace_files")
       .upsert(rows, { onConflict: "user_id,path" })
       .select("id, path, content, updated_at");
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void queryClient.invalidateQueries({ queryKey: ["workspace-files", user.id] });
     toast.success(t(`Imported ${data?.length ?? 0} file(s)`, `تم استيراد ${data?.length ?? 0} ملف`));
     if (data?.[0]) openFile(data[0].path);
@@ -441,7 +442,7 @@ function CodeWorkspace() {
     const ta = textareaRef.current;
     const selection = ta && ta.selectionStart !== ta.selectionEnd ? activeContent.slice(ta.selectionStart, ta.selectionEnd) : "";
     const code = selection || activeContent;
-    if (!code.trim()) return toast.error(t("Nothing to analyse", "لا يوجد كود لتحليله"));
+    if (!code.trim()) { toast.error(t("Nothing to analyse", "لا يوجد كود لتحليله")); return; }
     aiAbort.current?.abort();
     const controller = new AbortController();
     aiAbort.current = controller;
@@ -596,7 +597,7 @@ function CodeWorkspace() {
         <button
           type="button"
           onClick={running ? stopRun : run}
-          className="btn-primary !gap-1.5 !px-3 !py-1.5 !text-xs"
+          className="btn-hero !gap-1.5 !px-3 !py-1.5 !text-xs"
         >
           {running ? <Square className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
           {running ? t("Stop", "إيقاف") : t("Run", "تشغيل")}
@@ -784,7 +785,7 @@ function CodeWorkspace() {
                 placeholder={t("Ask about this file…", "اسأل عن هذا الملف…")}
                 className="flex-1 rounded-md border border-glass-border bg-background/40 px-3 py-1.5 text-sm outline-none focus:border-primary/60"
               />
-              <button type="submit" disabled={aiBusy || !aiQuestion.trim()} className="btn-primary !px-3 !py-1.5 !text-xs disabled:opacity-50">
+              <button type="submit" disabled={aiBusy || !aiQuestion.trim()} className="btn-hero !px-3 !py-1.5 !text-xs disabled:opacity-50">
                 {aiBusy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : t("Ask", "اسأل")}
               </button>
             </form>
@@ -803,7 +804,7 @@ function CodeWorkspace() {
             </div>
             {firstCodeBlock && !aiBusy && (
               <div className="border-t border-glass-border p-3">
-                <button type="button" onClick={applyAiCode} className="btn-primary w-full !py-2 !text-xs">
+                <button type="button" onClick={applyAiCode} className="btn-hero w-full !py-2 !text-xs">
                   <Wand2 className="h-3.5 w-3.5" /> {t("Apply code to editor", "تطبيق الكود في المحرر")}
                 </button>
               </div>
