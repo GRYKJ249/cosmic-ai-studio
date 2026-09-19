@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { BadgeCheck, Cpu, ImageIcon, Loader2, LogOut, Save, Sparkles } from "lucide-react";
+import { BadgeCheck, Code2, Cpu, ImageIcon, Loader2, LogOut, Save, Sparkles } from "lucide-react";
 import catAvatar from "@/assets/space-cat-avatar.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
