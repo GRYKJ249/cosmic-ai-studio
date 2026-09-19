@@ -149,7 +149,7 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="glass rounded-2xl p-6">
             <Cpu className="h-5 w-5 text-primary" />
             <p className="mt-3 text-3xl font-bold">{profile?.tokens_used ?? 0}</p>
