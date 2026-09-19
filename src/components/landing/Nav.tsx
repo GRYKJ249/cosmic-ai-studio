@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Contrast, ImageIcon, LayoutDashboard, LogIn, Palette, Volume2, VolumeX } from "lucide-react";
+import { Contrast, ImageIcon, LayoutDashboard, LogIn, Palette, Volume2, VolumeX, Code2 } from "lucide-react";
 import catAvatar from "@/assets/space-cat-avatar.png";
 import { useTheme } from "@/components/theme/ThemeProvider";
 import { useSound } from "@/hooks/use-sound";
@@ -90,6 +90,10 @@ export function Nav() {
           </a>
           {session ? (
             <>
+              <Link to="/code" onClick={click} className="btn-ghost !px-3 !py-2 text-xs md:!px-4">
+                <Code2 className="h-4 w-4" />
+                <span className="hidden lg:inline">{t("Code", "الأكواد")}</span>
+              </Link>
               <Link to="/studio" onClick={click} className="btn-ghost !px-3 !py-2 text-xs md:!px-4">
                 <ImageIcon className="h-4 w-4" />
                 <span className="hidden lg:inline">{t("Studio", "الاستوديو")}</span>
